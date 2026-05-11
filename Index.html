@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mahima Sharan | Strategy & Analytics</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        :root {
+            /* Light Pink Theme Variables */
+            --bg-page: #fff1f2; /* rose-50 */
+            --text-main: #4c0519; /* rose-950 */
+            --text-muted: #9f1239; /* rose-800/80 equivalent */
+            --card-bg: rgba(255, 255, 255, 0.45);
+            --card-border: rgba(251, 207, 217, 0.6); /* rose-200 */
+            --accent-gradient: linear-gradient(to right, #ec4899, #e11d48); /* pink-500 to rose-600 */
+        }
+
+        .dark {
+            --bg-page: #09090b; /* zinc-950 */
+            --text-main: #f4f4f5; /* zinc-100 */
+            --text-muted: #a1a1aa; /* zinc-400 */
+            --card-bg: rgba(24, 24, 27, 0.4);
+            --card-border: rgba(39, 39, 42, 0.5); /* zinc-800 */
+            --accent-gradient: linear-gradient(to right, #ec4899, #f43f5e); /* pink-500 to rose-500 */
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-page);
+            color: var(--text-main);
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+
+        /* Dotted Pattern from React file */
+        .dots-pattern {
+            position: fixed;
+            inset: 0;
+            background-image: radial-gradient(#be123c15 1px, transparent 1px);
+            background-size: 24px 24px;
+            z-index: -5;
+            pointer-events: none;
+        }
+        .dark .dots-pattern {
+            background-image: radial-gradient(#ffffff0a 1px, transparent 1px);
+        }
+
+        /* Glass Cards */
+        .glass-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(24px) saturate(120%);
+            -webkit-backdrop-filter: blur(24px) saturate(120%);
+            border: 1px solid var(--card-border);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Nav specific shadow/blur */
+        .nav-frosted {
+            backdrop-filter: blur(28px);
+            -webkit-backdrop-filter: blur(28px);
+            background: rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            box-shadow: inset 0 0 20px rgba(255,255,255,0.5), 0 10px 30px rgba(255,182,193,0.3);
+        }
+
+        .dark .nav-frosted {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: inset 0 0 20px rgba(255,255,255,0.1), 0 10px 40px rgba(0,0,0,0.4);
+        }
+
+        /* Animated Orbs */
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(120px);
+            z-index: -10;
+            pointer-events: none;
+        }
+
+        @keyframes orb-move-1 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(60px, 40px) scale(1.15); }
+        }
+
+        @keyframes orb-move-2 {
+            0%, 100% { transform: translate(0, 0) scale(1.1); }
+            50% { transform: translate(-50px, 70px) scale(1.3); }
+        }
+
+        .orb-1 {
+            width: 55%; height: 55%; top: -15%; left: -10%;
+            animation: orb-move-1 22s infinite linear;
+        }
+
+        .orb-2 {
+            width: 50%; height: 50%; bottom: -10%; right: -10%;
+            animation: orb-move-2 28s infinite linear;
+        }
+
+        /* Reveal Animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease-out;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .glass-hover:hover {
+            transform: translateY(-5px) scale(1.01);
+            border-color: rgba(236, 72, 153, 0.4); /* pink-500/40 */
+        }
+
+        .accent-text {
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body class="selection:bg-pink-500/30 selection:text-pink-600">
+
+    <!-- Background Elements -->
+    <div class="orb orb-1 bg-pink-300/40 dark:bg-pink-900/20"></div>
+    <div class="orb orb-2 bg-rose-200/50 dark:bg-rose-900/20"></div>
+    <div class="dots-pattern"></div>
+
+    <!-- Navbar -->
+    <nav class="fixed top-6 left-0 right-0 z-50 px-6 flex justify-center">
+        <div class="w-full max-w-6xl rounded-full px-8 py-4 flex items-center justify-between nav-frosted transition-all duration-500" id="navbar">
+            <div class="text-xl font-black tracking-tighter flex items-center gap-1">
+                <span class="w-8 h-8 rounded-full bg-pink-500/15 border border-pink-500/30 flex items-center justify-center text-pink-600 dark:text-pink-400 text-xs font-bold">M</span>
+                <span class="dark:text-white">MS</span><span class="text-pink-500">.</span>
+            </div>
+
+            <!-- Desktop Nav -->
+            <div class="hidden lg:flex items-center gap-6 xl:gap-8">
+                <a href="#about" class="text-xs xl:text-sm font-bold hover:text-pink-600 transition-all relative group uppercase tracking-widest">About
+                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-pink-500 transition-all duration-300 group-hover:w-full"></span>
+                </a>
+                <a href="#education" class="text-xs xl:text-sm font-bold hover:text-pink-600 transition-all relative group uppercase tracking-widest">Education
+                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-pink-500 transition-all duration-300 group-hover:w-full"></span>
+                </a>
+                <a href="#experience" class="text-xs xl:text-sm font-bold hover:text-pink-600 transition-all relative group uppercase tracking-widest">Experience
+                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-pink-500 transition-all duration-300 group-hover:w-full"></span>
+                </a>
+                <a href="#projects" class="text-xs xl:text-sm font-bold hover:text-pink-600 transition-all relative group uppercase tracking-widest">Projects
+                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-pink-500 transition-all duration-300 group-hover:w-full"></span>
+                </a>
+                <a href="#leadership" class="text-xs xl:text-sm font-bold hover:text-pink-600 transition-all relative group uppercase tracking-widest">Leadership
+                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-pink-500 transition-all duration-300 group-hover:w-full"></span>
+                </a>
+                <a href="#skills" class="text-xs xl:text-sm font-bold hover:text-pink-600 transition-all relative group uppercase tracking-widest">Skills
+                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-pink-500 transition-all duration-300 group-hover:w-full"></span>
+                </a>
+                <a href="#contact" class="text-xs xl:text-sm font-bold hover:text-pink-600 transition-all relative group uppercase tracking-widest">Contact
+                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-pink-500 transition-all duration-300 group-hover:w-full"></span>
+                </a>
+                <div class="w-[1px] h-6 bg-pink-200 dark:bg-zinc-800"></div>
+                <button id="theme-toggle" class="p-2 rounded-full hover:bg-pink-100 dark:hover:bg-pink-500/10 transition-colors text-pink-600 dark:text-pink-400">
+                    <i data-lucide="moon" class="w-5 h-5 dark:hidden"></i>
+                    <i data-lucide="sun" class="w-5 h-5 hidden dark:block"></i>
+                </button>
+            </div>
+
+            <!-- Mobile Toggle -->
+            <div class="flex lg:hidden items-center gap-4">
+                <button id="theme-toggle-mobile" class="p-2 rounded-full hover:bg-pink-100 text-pink-600 dark:text-pink-400">
+                    <i data-lucide="moon" class="w-5 h-5 dark:hidden"></i>
+                    <i data-lucide="sun" class="w-5 h-5 hidden dark:block"></i>
+                </button>
+                <button id="mobile-menu-btn" class="p-2 rounded-xl bg-pink-500/10 border border-pink-500/20 text-pink-600 dark:text-pink-400">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Overlay -->
+        <div id="mobile-menu" class="fixed inset-0 z-40 p-6 pt-32 hidden bg-rose-50/95 dark:bg-zinc-950/95 backdrop-blur-2xl lg:hidden">
+            <div class="flex flex-col items-center gap-8">
+                <a href="#about" class="mobile-link text-2xl font-bold hover:text-pink-600 transition-colors">About</a>
+                <a href="#education" class="mobile-link text-2xl font-bold hover:text-pink-600 transition-colors">Education</a>
+                <a href="#experience" class="mobile-link text-2xl font-bold hover:text-pink-600 transition-colors">Experience</a>
+                <a href="#projects" class="mobile-link text-2xl font-bold hover:text-pink-600 transition-colors">Projects</a>
+                <a href="#leadership" class="mobile-link text-2xl font-bold hover:text-pink-600 transition-colors">Leadership</a>
+                <a href="#skills" class="mobile-link text-2xl font-bold hover:text-pink-600 transition-colors">Skills</a>
+                <a href="#contact" class="mobile-link text-2xl font-bold hover:text-pink-600 transition-colors">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <!-- About Section -->
+        <section id="about" class="min-h-screen flex items-center pt-32 px-6 md:px-12 lg:px-24 max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center w-full">
+                <div class="reveal active">
+                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-6 glass-card border-pink-500/30">
+                        <span class="w-2 h-2 rounded-full animate-pulse bg-pink-500"></span>
+                        <span class="text-sm font-bold text-pink-600 dark:text-pink-400 uppercase tracking-widest">IIM Bangalore × Amity University</span>
+                    </div>
+                    <h1 class="text-5xl md:text-7xl font-bold tracking-tight mb-6">
+                        Mahima <span class="accent-text">Sharan</span>
+                    </h1>
+                    <p class="text-lg md:text-xl leading-relaxed mb-8 opacity-90 max-w-xl">
+                        Dual-degree business student specializing in <span class="font-bold text-pink-600 dark:text-pink-400">Business Analysis, ESG Research,</span> and <span class="font-bold text-pink-600 dark:text-pink-400">Strategic Problem Solving</span>. Delivering data-driven impact for global brands.
+                    </p>
+                    <div class="flex flex-wrap gap-4">
+                        <button class="px-8 py-4 rounded-2xl bg-gradient-to-r from-pink-500 to-rose-600 text-white font-bold shadow-lg shadow-pink-500/25 flex items-center gap-2 hover:scale-105 transition-all">
+                            <i data-lucide="file-text" class="w-5 h-5"></i> View Resume
+                        </button>
+                        <a href="https://linkedin.com/in/mahimasharan" target="_blank" class="px-8 py-4 rounded-2xl border glass-card font-bold flex items-center gap-2 hover:bg-pink-500/10 transition-colors">
+                            <i data-lucide="linkedin" class="w-5 h-5 text-pink-500"></i> LinkedIn
+                        </a>
+                    </div>
+                </div>
+
+                <div class="relative flex justify-center lg:justify-end reveal active">
+                    <div class="relative w-72 h-72 md:w-[450px] md:h-[450px]">
+                        <div class="absolute inset-0 rounded-[40px] bg-gradient-to-br from-pink-500 to-rose-600 opacity-10 animate-pulse"></div>
+                        <div class="absolute inset-4 rounded-[32px] border-2 border-dashed border-pink-200 dark:border-zinc-700 flex flex-col items-center justify-center text-center p-8 backdrop-blur-sm">
+                           <i data-lucide="user" class="w-16 h-16 mb-4 text-pink-600 dark:text-pink-400 opacity-40"></i>
+                           <p class="text-sm font-semibold opacity-70">Premium Professional Portfolio</p>
+                           <div class="mt-4 grid grid-cols-2 gap-4 w-full">
+                               <div class="p-3 rounded-2xl glass-card flex items-center justify-center animate-bounce shadow-sm"><i data-lucide="trending-up" class="text-pink-500"></i></div>
+                               <div class="p-3 rounded-2xl glass-card flex items-center justify-center animate-bounce shadow-sm" style="animation-delay: 0.2s"><i data-lucide="bar-chart-3" class="text-pink-500"></i></div>
+                               <div class="p-3 rounded-2xl glass-card flex items-center justify-center animate-bounce shadow-sm" style="animation-delay: 0.4s"><i data-lucide="globe" class="text-pink-500"></i></div>
+                               <div class="p-3 rounded-2xl glass-card flex items-center justify-center animate-bounce shadow-sm" style="animation-delay: 0.6s"><i data-lucide="shield-check" class="text-pink-500"></i></div>
+                           </div>
+                        </div>
+                        <div class="absolute -top-6 -right-6 p-4 rounded-2xl shadow-xl glass-card flex items-center gap-3 border-pink-200">
+                          <div class="w-10 h-10 rounded-lg bg-emerald-500/20 flex items-center justify-center text-emerald-600 font-bold">
+                            <i data-lucide="target" class="w-6 h-6"></i>
+                          </div>
+                          <div>
+                            <p class="text-xs font-black text-emerald-600 uppercase tracking-tighter">Strategy</p>
+                            <p class="text-sm font-bold">Focused</p>
+                          </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Education Section -->
+        <section id="education" class="py-24 px-6 md:px-12 lg:px-24 max-w-7xl mx-auto">
+            <div class="reveal">
+                <h2 class="text-4xl font-bold mb-4">Academic Background</h2>
+                <div class="w-20 h-1.5 bg-gradient-to-r from-pink-500 to-rose-600 rounded-full mb-12"></div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 reveal">
+                <div class="glass-card p-6 rounded-3xl glass-hover">
+                    <div class="flex items-center gap-4 mb-4">
+                      <div class="p-3 rounded-2xl bg-pink-500/10 text-pink-600 dark:text-pink-400">
+                        <i data-lucide="star" class="w-6 h-6"></i>
+                      </div>
+                      <h4 class="text-xl font-bold">IIM Bangalore</h4>
+                    </div>
+                    <p class="text-lg font-bold mb-1">BBA - Digital Business & Entrepreneurship</p>
+                    <p class="opacity-70 text-sm mb-4">2024 - 2027 | CGPA: 8.2/10</p>
+                    <div class="w-full bg-pink-100 dark:bg-pink-900/30 rounded-full h-1.5 overflow-hidden">
+                        <div class="bg-pink-500 h-full rounded-full" style="width: 82%"></div>
+                    </div>
+                </div>
+                <div class="glass-card p-6 rounded-3xl glass-hover">
+                    <div class="flex items-center gap-4 mb-4">
+                      <div class="p-3 rounded-2xl bg-rose-500/10 text-pink-600 dark:text-pink-400">
+                        <i data-lucide="star" class="w-6 h-6"></i>
+                      </div>
+                      <h4 class="text-xl font-bold">Amity University</h4>
+                    </div>
+                    <p class="text-lg font-bold mb-1">BA (Hons) Business Economics</p>
+                    <p class="opacity-70 text-sm mb-4">2023 - 2026 | CGPA: 8.5/10</p>
+                    <div class="w-full bg-pink-100 dark:bg-pink-900/30 rounded-full h-1.5 overflow-hidden">
+                        <div class="bg-pink-500 h-full rounded-full" style="width: 85%"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Experience Section -->
+        <section id="experience" class="py-24 px-6 md:px-12 lg:px-24 max-w-7xl mx-auto">
+            <div class="reveal">
+                <h2 class="text-4xl font-bold mb-4">Professional Journey</h2>
+                <div class="w-20 h-1.5 bg-gradient-to-r from-pink-500 to-rose-600 rounded-full mb-12"></div>
+            </div>
+
+            <div class="space-y-12">
+                <div class="relative pl-10 border-l-2 border-pink-300 dark:border-pink-800 reveal">
+                    <div class="absolute -left-[11px] top-0 w-5 h-5 rounded-full bg-pink-500 ring-4 ring-pink-500/20"></div>
+                    <div class="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-2">
+                        <div>
+                            <h3 class="text-2xl font-extrabold">Project Intern, Infosys Springboard</h3>
+                            <p class="text-pink-600 dark:text-pink-400 font-bold">Infosys Limited (Remote)</p>
+                        </div>
+                        <span class="px-4 py-1 rounded-xl text-sm font-bold glass-card border-pink-200 dark:border-zinc-800">Aug - Nov 2025</span>
+                    </div>
+                    <div class="glass-card p-8 rounded-[2rem] border-pink-100 dark:border-zinc-800">
+                        <ul class="space-y-5 opacity-90 leading-relaxed">
+                            <li class="flex gap-4">
+                                <i data-lucide="chevron-right" class="shrink-0 text-pink-500 w-5 h-5 mt-1"></i>
+                                <p>Led a 7-member team in designing and developing a <span class="font-bold text-pink-600 dark:text-pink-400">Power BI-based F&B analytics dashboard</span> using 4,000+ customer records.</p>
+                            </li>
+                            <li class="flex gap-4">
+                                <i data-lucide="chevron-right" class="shrink-0 text-pink-500 w-5 h-5 mt-1"></i>
+                                <p>Built a five-page interactive dashboard with KPI tracking, customer segmentation, and sustainability insights.</p>
+                            </li>
+                            <li class="flex gap-4">
+                                <i data-lucide="chevron-right" class="shrink-0 text-pink-500 w-5 h-5 mt-1"></i>
+                                <p>Applied Power Query, data modelling, and <span class="font-bold text-pink-600 dark:text-pink-400">DAX functions</span> to optimise performance and deliver actionable business insights.</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="projects" class="py-24 px-6 md:px-12 lg:px-24 max-w-7xl mx-auto">
+            <div class="reveal">
+                <h2 class="text-4xl font-bold mb-4">Strategic Projects</h2>
+                <div class="w-20 h-1.5 bg-gradient-to-r from-pink-500 to-rose-600 rounded-full mb-12"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Project 1 -->
+                <div class="glass-card p-6 rounded-[2.5rem] glass-hover reveal">
+                    <div class="flex justify-between items-start mb-6">
+                        <div class="p-4 rounded-2xl bg-pink-500/10 border border-pink-500/20 text-pink-600 dark:text-pink-400"><i data-lucide="cpu"></i></div>
+                        <span class="text-xs font-black uppercase tracking-widest opacity-50">2026</span>
+                    </div>
+                    <span class="inline-block px-3 py-1 rounded-lg text-[10px] font-black bg-pink-500/10 text-pink-600 dark:text-pink-400 mb-3 uppercase tracking-tighter">ESG & Sustainability</span>
+                    <h3 class="text-2xl font-bold mb-3">ESG Analysis: Plentitude Fragrances</h3>
+                    <p class="opacity-80 mb-6 text-sm leading-relaxed">Conducted field-based ESG assessment of a Greater Noida perfume SME; mapped operational sustainability gaps via stakeholder interviews.</p>
+                    <div class="flex flex-wrap gap-2">
+                        <div class="px-3 py-1.5 rounded-xl bg-pink-50 dark:bg-pink-900/20 border border-pink-100 dark:border-pink-800 text-[11px] font-bold">5+ Risks Identified</div>
+                        <div class="px-3 py-1.5 rounded-xl bg-pink-50 dark:bg-pink-900/20 border border-pink-100 dark:border-pink-800 text-[11px] font-bold">SME Case Study</div>
+                    </div>
+                </div>
+
+                <!-- Project 2 -->
+                <div class="glass-card p-6 rounded-[2.5rem] glass-hover reveal">
+                    <div class="flex justify-between items-start mb-6">
+                        <div class="p-4 rounded-2xl bg-pink-500/10 border border-pink-500/20 text-pink-600 dark:text-pink-400"><i data-lucide="trending-up"></i></div>
+                        <span class="text-xs font-black uppercase tracking-widest opacity-50">2026</span>
+                    </div>
+                    <span class="inline-block px-3 py-1 rounded-lg text-[10px] font-black bg-pink-500/10 text-pink-600 dark:text-pink-400 mb-3 uppercase tracking-tighter">Finance Research</span>
+                    <h3 class="text-2xl font-bold mb-3">Exchange Rate Impact on Defence PSU</h3>
+                    <p class="opacity-80 mb-6 text-sm leading-relaxed">Analysed 24-year macroeconomic data (2000-2024) to quantify currency risk exposure for HAL, BEL, and BEML.</p>
+                    <div class="flex flex-wrap gap-2">
+                        <div class="px-3 py-1.5 rounded-xl bg-pink-50 dark:bg-pink-900/20 border border-pink-100 dark:border-pink-800 text-[11px] font-bold">24Y Data Analysis</div>
+                        <div class="px-3 py-1.5 rounded-xl bg-pink-50 dark:bg-pink-900/20 border border-pink-100 dark:border-pink-800 text-[11px] font-bold">Policy Recs</div>
+                    </div>
+                </div>
+
+                <!-- Project 3 -->
+                <div class="glass-card p-6 rounded-[2.5rem] glass-hover reveal">
+                    <div class="flex justify-between items-start mb-6">
+                        <div class="p-4 rounded-2xl bg-pink-500/10 border border-pink-500/20 text-pink-600 dark:text-pink-400"><i data-lucide="target"></i></div>
+                        <span class="text-xs font-black uppercase tracking-widest opacity-50">2026</span>
+                    </div>
+                    <span class="inline-block px-3 py-1 rounded-lg text-[10px] font-black bg-pink-500/10 text-pink-600 dark:text-pink-400 mb-3 uppercase tracking-tighter">Entrepreneurship</span>
+                    <h3 class="text-2xl font-bold mb-3">C.N.V.R.T Sustainable Fashion</h3>
+                    <p class="opacity-80 mb-6 text-sm leading-relaxed">Led 90+ surveys and 12 interviews to identify style vs sustainability drivers; built full unit economics for investor pitch.</p>
+                    <div class="flex flex-wrap gap-2">
+                        <div class="px-3 py-1.5 rounded-xl bg-pink-50 dark:bg-pink-900/20 border border-pink-100 dark:border-pink-800 text-[11px] font-bold">33% Margin</div>
+                        <div class="px-3 py-1.5 rounded-xl bg-pink-50 dark:bg-pink-900/20 border border-pink-100 dark:border-pink-800 text-[11px] font-bold">INR 25L Target</div>
+                    </div>
+                </div>
+
+                <!-- Project 4 -->
+                <div class="glass-card p-6 rounded-[2.5rem] glass-hover reveal">
+                    <div class="flex justify-between items-start mb-6">
+                        <div class="p-4 rounded-2xl bg-pink-500/10 border border-pink-500/20 text-pink-600 dark:text-pink-400"><i data-lucide="globe"></i></div>
+                        <span class="text-xs font-black uppercase tracking-widest opacity-50">2025</span>
+                    </div>
+                    <span class="inline-block px-3 py-1 rounded-lg text-[10px] font-black bg-pink-500/10 text-pink-600 dark:text-pink-400 mb-3 uppercase tracking-tighter">Economics</span>
+                    <h3 class="text-2xl font-bold mb-3">Climate Finance & Growth Study</h3>
+                    <p class="opacity-80 mb-6 text-sm leading-relaxed">Applied panel data analysis across G20 economies to assess green growth vs development trade-offs.</p>
+                    <div class="flex flex-wrap gap-2">
+                        <div class="px-3 py-1.5 rounded-xl bg-pink-50 dark:bg-pink-900/20 border border-pink-100 dark:border-pink-800 text-[11px] font-bold">G20 Framework</div>
+                        <div class="px-3 py-1.5 rounded-xl bg-pink-50 dark:bg-pink-900/20 border border-pink-100 dark:border-pink-800 text-[11px] font-bold">Panel Data</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Leadership Section -->
+        <section id="leadership" class="py-24 px-6 md:px-12 lg:px-24 max-w-7xl mx-auto">
+            <div class="reveal">
+                <h2 class="text-4xl font-bold mb-4">Leadership</h2>
+                <div class="w-20 h-1.5 bg-gradient-to-r from-pink-500 to-rose-600 rounded-full mb-12"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="glass-card p-6 rounded-3xl reveal border-pink-200">
+                    <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-pink-500 to-rose-600 flex items-center justify-center text-white mb-6 shadow-md">
+                      <i data-lucide="award"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Vice President, DRACHMA Society</h3>
+                    <p class="text-pink-600 dark:text-pink-400 font-black text-sm mb-4">Amity University</p>
+                    <p class="opacity-70 text-sm mb-6 leading-relaxed">Increased student outreach by 40% and negotiated 3+ institutional tie-ups.</p>
+                    <span class="text-[10px] font-black uppercase tracking-widest opacity-40">2025 - 2026</span>
+                </div>
+                <div class="glass-card p-6 rounded-3xl reveal border-pink-200">
+                    <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-pink-500 to-rose-600 flex items-center justify-center text-white mb-6 shadow-md">
+                      <i data-lucide="award"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Head of Content, IIC</h3>
+                    <p class="text-pink-600 dark:text-pink-400 font-black text-sm mb-4">Amity University</p>
+                    <p class="opacity-70 text-sm mb-6 leading-relaxed">Produced 20+ content assets for Ministry of Education initiatives.</p>
+                    <span class="text-[10px] font-black uppercase tracking-widest opacity-40">2024 - 2025</span>
+                </div>
+                <div class="glass-card p-6 rounded-3xl reveal border-pink-200">
+                    <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-pink-500 to-rose-600 flex items-center justify-center text-white mb-6 shadow-md">
+                      <i data-lucide="award"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Conference Track Head</h3>
+                    <p class="text-pink-600 dark:text-pink-400 font-black text-sm mb-4">Amity University</p>
+                    <p class="opacity-70 text-sm mb-6 leading-relaxed">Led Track 3 coordination for a national SDG-oriented academic conference.</p>
+                    <span class="text-[10px] font-black uppercase tracking-widest opacity-40">Feb 2026</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section id="skills" class="py-24 px-6 md:px-12 lg:px-24 max-w-7xl mx-auto">
+            <div class="reveal">
+                <h2 class="text-4xl font-bold mb-4">Expertise</h2>
+                <div class="w-20 h-1.5 bg-gradient-to-r from-pink-500 to-rose-600 rounded-full mb-12"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div class="reveal">
+                    <h3 class="text-xl font-extrabold mb-8 flex items-center gap-3">
+                        <span class="w-8 h-8 rounded-full bg-pink-500/20 flex items-center justify-center text-pink-600 text-sm font-bold">1</span>
+                        Technical & Analytics
+                    </h3>
+                    <div class="flex flex-wrap gap-3">
+                        <div class="px-5 py-3 rounded-2xl glass-card text-sm font-bold glass-hover border-pink-100">MS Excel</div>
+                        <div class="px-5 py-3 rounded-2xl glass-card text-sm font-bold glass-hover border-pink-100">Power BI</div>
+                        <div class="px-5 py-3 rounded-2xl glass-card text-sm font-bold glass-hover border-pink-100">Data Analysis</div>
+                        <div class="px-5 py-3 rounded-2xl glass-card text-sm font-bold glass-hover border-pink-100">Business Analytics</div>
+                        <div class="px-5 py-3 rounded-2xl glass-card text-sm font-bold glass-hover border-pink-100">Financial Analysis</div>
+                        <div class="px-5 py-3 rounded-2xl glass-card text-sm font-bold glass-hover border-pink-100">KPI Tracking</div>
+                        <div class="px-5 py-3 rounded-2xl glass-card text-sm font-bold glass-hover border-pink-100">Visualization</div>
+                    </div>
+                </div>
+                <div class="reveal">
+                    <h3 class="text-xl font-extrabold mb-8 flex items-center gap-3">
+                        <span class="w-8 h-8 rounded-full bg-pink-500/20 flex items-center justify-center text-pink-600 text-sm font-bold">2</span>
+                        Business & Strategy
+                    </h3>
+                    <div class="flex flex-wrap gap-3">
+                        <div class="px-5 py-3 rounded-2xl glass-card text-sm font-bold glass-hover border-pink-100">Strategic Analysis</div>
+                        <div class="px-5 py-3 rounded-2xl glass-card text-sm font-bold glass-hover border-pink-100">ESG Analysis</div>
+                        <div class="px-5 py-3 rounded-2xl glass-card text-sm font-bold glass-hover border-pink-100">Process Optimisation</div>
+                        <div class="px-5 py-3 rounded-2xl glass-card text-sm font-bold glass-hover border-pink-100">Stakeholder Mgmt</div>
+                        <div class="px-5 py-3 rounded-2xl glass-card text-sm font-bold glass-hover border-pink-100">Competitive Analysis</div>
+                        <div class="px-5 py-3 rounded-2xl glass-card text-sm font-bold glass-hover border-pink-100">Market Research</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="py-24 px-6 md:px-12 lg:px-24 max-w-7xl mx-auto">
+            <div class="rounded-[40px] p-8 md:p-16 relative overflow-hidden bg-gradient-to-br from-white to-pink-50 dark:from-zinc-900 dark:to-black border border-pink-200 dark:border-zinc-800 reveal">
+                <div class="absolute top-0 right-0 w-64 h-64 bg-pink-500/10 blur-[80px] rounded-full"></div>
+                
+                <div class="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                    <div>
+                        <h2 class="text-4xl md:text-5xl font-black leading-tight mb-6">Let's build the <span class="accent-text">next big vision</span>.</h2>
+                        <p class="opacity-80 text-lg mb-10">Open for business analysis, strategy consulting, and ESG research opportunities.</p>
+                        
+                        <div class="space-y-6">
+                            <a href="mailto:1301.mahimasharan@gmail.com" class="flex items-center gap-4 p-4 rounded-2xl hover:bg-pink-500/10 transition-colors group">
+                                <div class="p-4 rounded-xl glass-card group-hover:bg-pink-500 group-hover:text-white transition-all">
+                                    <i data-lucide="mail"></i>
+                                </div>
+                                <div>
+                                    <p class="text-[10px] font-black uppercase tracking-widest opacity-50">Email</p>
+                                    <p class="text-lg font-bold">1301.mahimasharan@gmail.com</p>
+                                </div>
+                            </a>
+                            <a href="https://linkedin.com/in/mahimasharan" target="_blank" class="flex items-center gap-4 p-4 rounded-2xl hover:bg-pink-500/10 transition-colors group">
+                                <div class="p-4 rounded-xl glass-card group-hover:bg-pink-500 group-hover:text-white transition-all">
+                                    <i data-lucide="linkedin"></i>
+                                </div>
+                                <div>
+                                    <p class="text-[10px] font-black uppercase tracking-widest opacity-50">LinkedIn</p>
+                                    <p class="text-lg font-bold">mahimasharan</p>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="p-8 rounded-3xl glass-card border-pink-200">
+                        <form class="space-y-6" onsubmit="event.preventDefault();">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-xs font-black uppercase tracking-widest mb-2 opacity-60">Name</label>
+                                    <input type="text" class="w-full p-4 rounded-xl bg-white/40 dark:bg-black/20 border border-pink-100 dark:border-zinc-800 outline-none focus:ring-2 focus:ring-pink-500 transition-all" placeholder="John Doe" required />
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-black uppercase tracking-widest mb-2 opacity-60">Email</label>
+                                    <input type="email" class="w-full p-4 rounded-xl bg-white/40 dark:bg-black/20 border border-pink-100 dark:border-zinc-800 outline-none focus:ring-2 focus:ring-pink-500 transition-all" placeholder="john@example.com" required />
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-black uppercase tracking-widest mb-2 opacity-60">Message</label>
+                                <textarea class="w-full p-4 rounded-xl bg-white/40 dark:bg-black/20 border border-pink-100 dark:border-zinc-800 outline-none focus:ring-2 focus:ring-pink-500 transition-all min-h-[120px]" placeholder="How can I help you?" required></textarea>
+                            </div>
+                            <button type="submit" class="w-full py-5 rounded-xl bg-gradient-to-r from-pink-500 to-rose-600 text-white font-black text-lg shadow-xl shadow-pink-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all">SEND MESSAGE</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="py-12 px-6 border-t border-pink-100 dark:border-zinc-800 mt-12 bg-white/30 dark:bg-black/30 backdrop-blur-sm">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+            <div>
+                <div class="text-2xl font-black tracking-tighter mb-2">
+                    Mahima Sharan<span class="text-pink-500">.</span>
+                </div>
+                <p class="opacity-50 text-xs font-bold uppercase tracking-[0.2em]">Designed for Strategy & Impact</p>
+            </div>
+            <div class="flex gap-8 text-[11px] font-black uppercase tracking-widest opacity-50">
+                <a href="#" class="hover:text-pink-600 transition-colors">Privacy</a>
+                <a href="#" class="hover:text-pink-600 transition-colors">Terms</a>
+                <a href="#contact" class="hover:text-pink-600 transition-colors">Contact</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Icons
+        lucide.createIcons();
+
+        // Theme Logic
+        const themeToggles = [document.getElementById('theme-toggle'), document.getElementById('theme-toggle-mobile')];
+        const htmlElement = document.documentElement;
+
+        themeToggles.forEach(toggle => {
+            toggle.addEventListener('click', () => {
+                htmlElement.classList.toggle('dark');
+            });
+        });
+
+        // Mobile Menu
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        document.querySelectorAll('.mobile-link').forEach(link => {
+            link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+        });
+
+        // Scroll Reveal
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('active');
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+        // Sticky Nav Resize
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('py-3');
+                navbar.classList.remove('py-4');
+            } else {
+                navbar.classList.add('py-4');
+                navbar.classList.remove('py-3');
+            }
+        });
+    </script>
+</body>
+</html>
